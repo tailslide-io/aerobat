@@ -13,7 +13,7 @@ const config = {
 
   setInterval(() => {
     circuitBreaker.checkCircuits();
-  }, 5000);
+  }, 500);
   console.log(manager.getActiveRules());
 
   const cleanup = async () => {
