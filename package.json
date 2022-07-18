@@ -1,0 +1,25 @@
+{
+  "name": "handler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailslide-io/handler.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tailslide-io/handler/issues"
+  },
+  "homepage": "https://github.com/tailslide-io/handler#readme",
+  "dependencies": {
+    "@redis/time-series": "^1.0.3",
+    "nats": "^2.7.1",
+    "redis": "^4.2.0"
+  }
+}
