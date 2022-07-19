@@ -2,7 +2,7 @@ const CircuitManager = require('./lib/circuitManager');
 
 const config = {
   server: 'nats://127.0.0.1:4222',
-  appId: 9,
+  appId: 1,
   redisAddress: '',
 };
 
@@ -11,9 +11,10 @@ const config = {
   await manager.initializeCircuit();
   const circuitBreaker = manager.circuitBreaker;
 
-  setInterval(() => {
-    circuitBreaker.checkCircuits();
-  }, 500);
+  setInterval(async () => {
+    console.log('checking circuits within setInterval');
+    await circuitBreaker.checkCircuits();
+  }, 4000);
   console.log(manager.getActiveRules());
 
   const cleanup = async () => {
