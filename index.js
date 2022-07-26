@@ -1,9 +1,12 @@
 const CircuitManager = require('./lib/circuitManager');
 
 const config = {
+  stream: 'flags_ruleset',
   server: 'nats://127.0.0.1:4222',
   appId: 1,
   redisAddress: '',
+  sdkKey: 'myToken',
+  timeWindow: 100000000,
 };
 
 (async () => {
