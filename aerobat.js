@@ -2,13 +2,13 @@ require('dotenv').config();
 const CircuitManager = require('./lib/circuitManager');
 
 const appId = process.argv[2];
-const redisPollRate = Number(process.argv[3]);
+const redisPollRate = Number(process.env.REDIS_POLL_RATE);
 
 let manager;
 
-const cleanup = async () => {
+const cleanupAndExit = async () => {
   await manager.disconnect();
-  console.log('closing nats');
+  process.exit();
 };
 
 const circuitConfig = {
@@ -18,8 +18,8 @@ const circuitConfig = {
   token: process.env.NATS_SERVER,
   appId,
   redisAddress: '',
-  sdkKey: 'myToken',
-  timeWindow: 10000,
+  sdkKey: process.env.SDK_KEY,
+  timeWindow: process.env.REDIS_TIME_WINDOW,
 };
 
 (async () => {
@@ -27,14 +27,16 @@ const circuitConfig = {
   await manager.initializeCircuit();
   const circuitBreaker = manager.circuitBreaker;
 
-  setInterval(async () => {
-    console.log(`checking circuits within setInterval in app ${appId}`);
-    await circuitBreaker.checkCircuits();
-  }, redisPollRate);
-  console.log(manager.getActiveRules());
+  setInterval(async () => {}, redisPollRate);
 
-  process.on('message', () => {
-    cleanup();
-    process.exit();
-  });
+  (async function checkCircuits() {
+    console.log(`checking circuits within setInterval in app ${appId}`);
+    console.log('checking circuits within setInterval');
+    await circuitBreaker.checkCircuits();
+    setTimeout(checkCircuits, redisPollRate);
+  })();
 })();
+
+process.on('message', async () => {
+  await cleanupAndExit();
+});

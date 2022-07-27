@@ -3,7 +3,6 @@ const fork = require('child_process').fork;
 
 const NatsClient = require('./lib/natsClient');
 
-//  stream, server, subject, callback, token
 const NatsConfig = {
   stream: process.env.NATS_STREAM,
   server: process.env.NATS_SERVER,
@@ -15,8 +14,6 @@ const NatsConfig = {
 const processTrackers = {};
 
 function trackCircuitManagers(flags, subject) {
-  // handle when no more flags
-  // subject: apps.3.update.manual
   if (flags.length === 0) {
     if (subject in processTrackers) {
       delete processTrackers[subject];
@@ -24,28 +21,21 @@ function trackCircuitManagers(flags, subject) {
     }
     return;
   }
-  // handle flags
-  // return if process already exists
   if (subject in processTrackers) {
     return;
   }
 
-  // create new process
-  // subscribeSubject: apps.3.>
   const appId = subject.match(/apps\.(\d+)\.update\.manual/)[1];
 
-  const child = fork('./aerobat.js', [appId, process.env.REDIS_POLL_RATE]);
+  const child = fork('./aerobat.js', [appId]);
 
   processTrackers[subject] = child;
 }
 
 function cleanupProcesses() {
   console.log('trying to close app.js');
-  console.log(Object.keys(processTrackers));
   Object.entries(processTrackers).forEach(([processName, childProcess]) => {
-    childProcess.send('');
-    childProcess.send('');
-    delete processTrackers[processName];
+    childProcess.send('hello you are closing');
   });
   process.exit();
 }
@@ -56,8 +46,6 @@ process.on('SIGINT', cleanupProcesses);
   const circuitOrganizer = new NatsClient(NatsConfig);
   const lastMsgPerSubject = true;
   await circuitOrganizer.initializeFlags(lastMsgPerSubject);
-
-  console.log('passed initializing flags');
 })();
 
 /*
