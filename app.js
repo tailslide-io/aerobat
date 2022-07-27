@@ -7,7 +7,7 @@ const NatsClient = require('./lib/natsClient');
 const NatsConfig = {
   stream: process.env.NATS_STREAM,
   server: process.env.NATS_SERVER,
-  subject: process.env.NATS_SUBJECT, //
+  subject: process.env.NATS_SUBJECT,
   token: process.env.SDK_KEY,
   callback: trackCircuitManagers,
 };
@@ -40,20 +40,24 @@ function trackCircuitManagers(flags, subject) {
 }
 
 function cleanupProcesses() {
+  console.log('trying to close app.js');
+  console.log(Object.keys(processTrackers));
   Object.entries(processTrackers).forEach(([processName, childProcess]) => {
+    childProcess.send('');
     childProcess.send('');
     delete processTrackers[processName];
   });
+  process.exit();
 }
+
+process.on('SIGINT', cleanupProcesses);
 
 (async () => {
   const circuitOrganizer = new NatsClient(NatsConfig);
   const lastMsgPerSubject = true;
   await circuitOrganizer.initializeFlags(lastMsgPerSubject);
 
-  process.on('exit', cleanupProcesses);
-  // process.on('SIGINT', cleanupProcesses);
-  // process.on('SIGTERM', cleanupProcesses);
+  console.log('passed initializing flags');
 })();
 
 /*
