@@ -6,11 +6,18 @@ const config = {
   appId: 1,
   redisAddress: '',
   sdkKey: 'myToken',
-  timeWindow: 100000000,
+  timeWindow: 10000,
+};
+
+let manager;
+
+const cleanup = async () => {
+  await manager.disconnect();
+  console.log('closing nats');
 };
 
 (async () => {
-  const manager = new CircuitManager(config);
+  manager = new CircuitManager(config);
   await manager.initializeCircuit();
   const circuitBreaker = manager.circuitBreaker;
 
@@ -19,11 +26,6 @@ const config = {
     await circuitBreaker.checkCircuits();
   }, 4000);
   console.log(manager.getActiveRules());
-
-  const cleanup = async () => {
-    await manager.disconnect();
-    console.log('closing nats');
-  };
 
   process.on('SIGINT', cleanup);
   process.on('SIGTERM', cleanup);
