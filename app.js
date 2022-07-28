@@ -14,8 +14,7 @@ const NatsConfig = {
 const processTrackers = {};
 
 function trackCircuitManagers(flags, subject) {
-  const activeFlags = flags.filter((flag) => flag.is_active);
-  if (activeFlags.length === 0) {
+  if (flags.length === 0) {
     if (subject in processTrackers) {
       processTrackers[subject].kill();
       delete processTrackers[subject];
@@ -28,7 +27,7 @@ function trackCircuitManagers(flags, subject) {
 
   const appId = subject.match(/apps\.(\d+)\.update\.manual/)[1];
   const child = fork('./aerobat.js', [appId]);
-  child.send(activeFlags);
+  child.send(flags);
   processTrackers[subject] = child;
 }
 
