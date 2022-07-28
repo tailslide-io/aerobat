@@ -7,10 +7,9 @@ const redisPollRate = Number(process.env.REDIS_POLL_RATE);
 const circuitConfig = {
   stream: process.env.NATS_STREAM,
   server: process.env.NATS_SERVER,
-  subject: process.env.NATS_SUBJECT,
-  token: process.env.NATS_SERVER,
   appId,
-  redisAddress: '',
+  redisHost: process.env.REDIS_HOST,
+  redisPort: process.env.REDIS_PORT,
   sdkKey: process.env.SDK_KEY,
   timeWindow: process.env.REDIS_TIME_WINDOW,
 };
