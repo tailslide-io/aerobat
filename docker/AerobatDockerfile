@@ -1,0 +1,12 @@
+FROM node:16.16-alpine3.15
+
+RUN mkdir -p /home/aerobat
+
+COPY ./aerobat /home/aerobat
+
+WORKDIR /home/aerobat
+
+RUN npm ci
+
+CMD ["node", "app.js"]
+

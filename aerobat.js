@@ -5,10 +5,10 @@ const appId = process.argv[2];
 const redisPollRate = Number(process.env.REDIS_POLL_RATE);
 
 const circuitConfig = {
-  stream: process.env.NATS_STREAM,
+  stream: process.env.NATS_STREAM_NAME,
   server: process.env.NATS_SERVER,
   appId,
-  redisAddress: '',
+  redisAddress: JSON.parse(process.env.REDIS_SERVER),
   sdkKey: process.env.SDK_KEY,
   timeWindow: process.env.REDIS_TIME_WINDOW,
 };
@@ -23,13 +23,13 @@ const cleanupAndExit = async () => {
 function runCircuits(latestFlags) {
   (async () => {
     await manager.initializeCircuit(latestFlags);
+    console.log(`Aerobat connected to Redis in app ${appId}`)
     const circuitBreaker = manager.circuitBreaker;
 
     setInterval(async () => {}, redisPollRate);
 
     (async function checkCircuits() {
       console.log(`checking circuits within setInterval in app ${appId}`);
-      console.log('checking circuits within setInterval');
       await circuitBreaker.checkCircuits();
       setTimeout(checkCircuits, redisPollRate);
     })();
