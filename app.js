@@ -14,10 +14,11 @@ const NatsConfig = {
 const processTrackers = {};
 
 function trackCircuitManagers(flags, subject) {
-  if (flags.length === 0) {
+  const activeFlags = flags.filter((flag) => flag.is_active);
+  if (activeFlags.length === 0) {
     if (subject in processTrackers) {
+      processTrackers[subject].kill();
       delete processTrackers[subject];
-      processTrackers[subject].send('');
     }
     return;
   }
@@ -26,16 +27,15 @@ function trackCircuitManagers(flags, subject) {
   }
 
   const appId = subject.match(/apps\.(\d+)\.update\.manual/)[1];
-
   const child = fork('./aerobat.js', [appId]);
-
+  child.send(activeFlags);
   processTrackers[subject] = child;
 }
 
 function cleanupProcesses() {
   console.log('trying to close app.js');
-  Object.entries(processTrackers).forEach(([processName, childProcess]) => {
-    childProcess.send('hello you are closing');
+  Object.values(processTrackers).forEach((controller) => {
+    controller.kill();
   });
   process.exit();
 }
