@@ -46,21 +46,3 @@ process.on('SIGINT', cleanupProcesses);
   const lastMsgPerSubject = true;
   await circuitOrganizer.initializeFlags(lastMsgPerSubject);
 })();
-
-/*
-apps.1.update.manual
-apps.2.update.manual
-apps.3.update.manual
-
-CircuitOrganizer 
-  -> get the last messages from 1, 2, and 3 (and new apps.*) 
-    -> keyword: deliverlastPersubject
-  -> get all on going messages from 1, 2, 3
-
-
-apps.1.>
-CircuitHandler
-  -> get the last messages from 1.>
-  -> get all ongoing messages from 1.>
-
-*/
