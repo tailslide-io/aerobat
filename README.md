@@ -17,7 +17,6 @@ Note: all developer-defined variables can be specified via `Tower` front-end
 Clone main branch of repository
 
 Add .env file into the root directory  
-# I think we can actually include a .env file in the Github repository, similar to the way Pioneer did it https://github.com/pioneer-io/pioneer, so I don't think we need to put the .env here
 
 ```javascript
 
