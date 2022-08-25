@@ -8,8 +8,7 @@ const circuitConfig = {
   stream: process.env.NATS_STREAM,
   server: process.env.NATS_SERVER,
   appId,
-  redisHost: process.env.REDIS_HOST,
-  redisPort: process.env.REDIS_PORT,
+  redisAddress: JSON.parse(process.env.REDIS_SERVER),
   sdkKey: process.env.SDK_KEY,
   timeWindow: process.env.REDIS_TIME_WINDOW,
 };
@@ -29,8 +28,6 @@ function runCircuits(latestFlags) {
     setInterval(async () => {}, redisPollRate);
 
     (async function checkCircuits() {
-      console.log(`checking circuits within setInterval in app ${appId}`);
-      console.log('checking circuits within setInterval');
       await circuitBreaker.checkCircuits();
       setTimeout(checkCircuits, redisPollRate);
     })();

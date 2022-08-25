@@ -32,7 +32,6 @@ function trackCircuitManagers(flags, subject) {
 }
 
 function cleanupProcesses() {
-  console.log('trying to close app.js');
   Object.values(processTrackers).forEach((controller) => {
     controller.kill();
   });
