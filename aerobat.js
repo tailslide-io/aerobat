@@ -29,8 +29,6 @@ function runCircuits(latestFlags) {
     setInterval(async () => {}, redisPollRate);
 
     (async function checkCircuits() {
-      console.log(`checking circuits within setInterval in app ${appId}`);
-      console.log('checking circuits within setInterval');
       await circuitBreaker.checkCircuits();
       setTimeout(checkCircuits, redisPollRate);
     })();
