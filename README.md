@@ -24,8 +24,7 @@ NATS_SERVER='nats://127.0.0.1:4222'
 NATS_STREAM='flags_ruleset'
 NATS_SUBJECT="apps.*.update.manual" 
 
-REDIS_HOST='http://localhost:'
-REDIS_PORT=6379
+REDIS_SERVER='{"socket":{"host":"localhost"}}' 
 REDIS_POLL_RATE=3000
 REDIS_TIME_WINDOW=3000
 ```
