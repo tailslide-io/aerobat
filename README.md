@@ -33,7 +33,7 @@ REDIS_POLL_RATE=3000
 REDIS_TIME_WINDOW=3000
 ```
 
-Within the root directory run `npm install`
+Within the root directory run `npm install` \
 Run `npm start`
 
 
