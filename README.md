@@ -4,7 +4,7 @@
 
 # Aerobat
 
-## Usage
+## Overview
 
 Aerobat is responsible for querying the Redis Timeseries database for each live circuit within an application, to evaluate current error rates against developer-configured error thresholds.
 
@@ -16,7 +16,7 @@ Once a circuit is tripped open, Aerobat will wait a developer-defined amount of 
 
 Note: all developer-defined variables can be specified via `Tower` front-end
 
-## Run the app individually
+## Running Aerobat Locally
 
 Clone main branch of repository
 
@@ -33,7 +33,7 @@ REDIS_POLL_RATE=3000
 REDIS_TIME_WINDOW=3000
 ```
 
-Within the root directory run `npm install`
+Within the root directory run `npm install` \
 Run `npm start`
 
 
